@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Three.js & Physi.js Alunissage démo.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        html {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            display: block;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        #info {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            padding: 5px;
+            color: #ffffff;
+        }
+        
+        a {
+            color: #a06851;
+        }
+        
+        #speedometer {
+            color: #ffffff;
+            background-color: #990000;
+            position: absolute;
+            bottom: 0px;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="container"><br /><br /><br /><br /><br />Loading...</div>
+    <div id="speedometer">0.0 km/h</div>
+    <div id="info">Three.js & Physi.js Alunissage démo.<br>Utiliser les flèches pour bouger la caméra.<br>Utiliser le pavé numérique pour propulser le module.</div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/three/three.js"></script>
+    <script src="js/three/physi.js"></script>
+    <script src="js/three/OrbitControls.js"></script>
+    <script src="js/three/Detector.js"></script>
+    <script src="js/three/stats.min.js"></script>
+    <script src="js/three/simplex-noise.js"></script>
+    <script src="js/three/ImprovedNoise.js"></script>
+    <script src="js/three/GPUParticleSystem.js"></script>
+    <script src="js/three/ExplodeModifier.js"></script>
+    <script src="js/three/TessellateModifier.js"></script>
+
+    <scrip>
+        'use strict'; Physijs.scripts.worker = 'physijs_worker.js'; Physijs.scripts.ammo = 'ammo.js';
+    </scrip>
+
+    <script src="js/camera.js"></script>
+    <script src="js/terrain.js"></script>
+    <script src="js/lunar.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/text.js"></script>
+
+    <script type="x-shader/x-vertex" id="vertexshader">
+        uniform float amplitude; attribute vec3 customColor; attribute vec3 displacement; varying vec3 vNormal; varying vec3 vColor; void main() { vNormal = normal; vColor = customColor; vec3 newPosition = position + normal * amplitude * displacement; gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 ); }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragmentshader">
+        varying vec3 vNormal; varying vec3 vColor; void main() { const float ambient = 0.4; vec3 light = vec3( 1.0 ); light = normalize( light ); float directional = max( dot( vNormal, light ), 0.0 ); gl_FragColor = vec4( ( directional + ambient ) * vColor, 1.0 ); }
+    </script>
+</body>
+
+</html>
